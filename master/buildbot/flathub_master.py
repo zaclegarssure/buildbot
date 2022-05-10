@@ -1042,6 +1042,8 @@ def create_build_factory():
                 shellArg(['flatpak', '--user', 'install', '--or-update', '--noninteractive', 'flathub', 'org.flatpak.flat-manager-client']),
                 shellArg(['flatpak', '--user', 'install', '--or-update', '--noninteractive', 'flathub', 'org.flathub.flatpak-external-data-checker']),
                 shellArg(['flatpak', '--user', 'install', '--or-update', '--noninteractive', 'flathub', 'org.flatpak.Builder']),
+                # Enforce the build to be done with SOURCE_DATE_EPOCH=commit_date
+                shellArg(['touch', '-d "$(git log -1 --pretty=%cI)"' , util.Interpolate('%(prop:flathub_manifest)s')]),
             ]),
         FlatpakBuildStep(name='Build'),
         steps.SetPropertyFromCommand(name='Extract built tags',
